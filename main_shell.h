@@ -7,4 +7,6 @@
 #include <sys/types.h>
 #include <limits.h>
 
+int main(int ac, char **av);
+
 #endif
