@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
 	else
 	{
-		if (feof(stdin))
+		if (nread == -1)
 		{
 			printf("End of input (EOF) reached.\n");
 		}
