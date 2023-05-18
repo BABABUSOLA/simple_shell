@@ -11,4 +11,8 @@ Exercise 1: Run `./pid_max` to the get maximum number processes
 
 Exercise 0: Run `gcc -Wall -Wextra -Werror -pedantic get_arg.c -o get_arg && ./get_arg arg1 arg2 arg3` to get the list processes.
 
-Exercise 1: Run gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./prompt`, this will open a $ sign words can be typed, pressing enter, displays the text typed, to exit in VI, use Ctrl+c
+Exercise 1a: Run `gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./prompt`, this will open a $ sign words can be typed, pressing enter, displays the text typed, to exit in VI, use Ctrl+c
+
+Exercise 1b: Run `gcc -Wall -Wextra -Werror -pedantic _getline.c prompt.c -o prompt && ./prompt`. this is different from 1a as I am using my getline line function instead of the built in get line function.
+
+Run `gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./prompt`, this is different from 1b as I am using my getline line function instead of the built in get line function in the same file
