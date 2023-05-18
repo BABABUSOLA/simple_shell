@@ -9,5 +9,5 @@
 
 int main(int ac, char **av);
 int main(int argc, char **argv);
-
+ssize_t my_getline(char **buff, size_t *length);
 #endif

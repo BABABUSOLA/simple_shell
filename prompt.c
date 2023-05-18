@@ -1,5 +1,5 @@
+#include <stdio.h>
 #include "main_shell.h"
-
 /**
  * input_buf - buffers chained commands
  * @argc: address of buffer
@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 		printf("$ ");
 		fflush(stdout);
 
-		nread = getline(&buf, &len, stdin);
+		nread = my_getline(&buf, &len);
 
 	if (nread != -1)
 	{
