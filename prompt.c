@@ -2,6 +2,23 @@
 #include "main_shell.h"
 
 /**
+ * freeWords - provide the memory allocated
+ * @words: the input string
+ * @wordCount: integer that store number of words found
+ *
+ * Return: 0
+ */
+
+void freeWords(char **words, int wordCount)
+{
+	for (int i = 0; i < wordCount; i++)
+	{
+		free(words[i]);
+	}
+	free(words);
+}
+
+/**
  * my_getline - buffers chained commands
  * @buff: address of buffer
  * @length: address of len var
@@ -66,32 +83,36 @@ int main(int argc, char **argv)
 	{
 		printf("$ ");
 		fflush(stdout);
-
 		nread = my_getline(&buf, &len);
 
 	if (nread != -1)
 	{
 		if (nread > 0 && buf[nread - 1] == '\n')
 			buf[nread - 1] = '\0';
+		int wordCount;
+		char **words = splitString(buf, &wordCount);
 
-		printf("%s\n", buf);
-	}
-
-	else
-	{
-		if (nread == -1)
+		if (words != NULL)
 		{
-			printf("End of input (EOF) reached.\n");
+			printf("Number of words: %d\n", wordCount);
+			for (int i = 0; i < wordCount; i++)
+			{
+				printf("Word %d: %s\n", i + 1, words[i]);
+			}
+			freeWords(words, wordCount);
 		}
 		else
 		{
-			printf("Error reading input.\n");
+			printf("Memory allocation failed.\n");
 		}
+		printf("%s\n", buf);
+	}
+	else
+	{
+		printf("End of input (EOF) reached.\n");
 		break;
 	}
 	}
-
 	free(buf);
 	return (0);
 }
-
