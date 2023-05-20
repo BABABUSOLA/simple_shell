@@ -19,3 +19,18 @@ Run `gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./prompt`, this i
 
 Exercise 2a: Run `gcc -Wall -Wextra -Werror -pedantic getString.c -o getString && ./getString`, this will generate a response without the use of strok.
 Exercise 2b: Run `gcc -Wall -Wextra -Werror -pedantic _strArray.c prompt.c -o prompt && ./prompt
+
+#Executing a program
+
+Run `gcc -Wall -Wextra -Werror -pedantic exec.c -o exec && ./exec`
+
+#Creating Processes
+
+Run `gcc -Wall -Wextra -Werror -pedantic fork.c -o fork && ./fork`
+
+#Wait
+Run `gcc -Wall -Wextra -Werror -pedantic wait.c -o wait && ./wait`
+
+#Exercise: fork + wait + execve
+
+Run `gcc -Wall -Wextra -Werror -pedantic forkWaitExec.c -o forkWaitExec && ./forkWaitExec`
