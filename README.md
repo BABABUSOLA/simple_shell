@@ -16,3 +16,6 @@ Exercise 1a: Run `gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./pr
 Exercise 1b: Run `gcc -Wall -Wextra -Werror -pedantic _getline.c prompt.c -o prompt && ./prompt`. this is different from 1a as I am using my getline line function instead of the built in get line function.
 
 Run `gcc -Wall -Wextra -Werror -pedantic prompt.c -o prompt && ./prompt`, this is different from 1b as I am using my getline line function instead of the built in get line function in the same file
+
+Exercise 2a: Run `gcc -Wall -Wextra -Werror -pedantic getString.c -o getString && ./getString`, this will generate a response without the use of strok.
+Exercise 2b: Run `gcc -Wall -Wextra -Werror -pedantic _strArray.c prompt.c -o prompt && ./prompt
