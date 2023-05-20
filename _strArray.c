@@ -57,6 +57,7 @@ char *_strcpy(char *dest, const char *src)
 char *_strdup(const char *string)
 {
 	int length = 0;
+
 	while (string[length] != '\0')
 	{
 		length++;
@@ -73,6 +74,32 @@ char *_strdup(const char *string)
 }
 
 /**
+ * *_strchr - locates a character in a string
+ * @s: string to search
+ * @c: char to find
+ *
+ * Return: a pointer to the first occurrence of the character
+ * c in the string s, or NULL if the character is not found
+ */
+char *_strchr(char *s, char c)
+{
+	int a;
+
+	while (1)
+	{
+		a = *s++;
+		if (a == c)
+		{
+			return (s - 1);
+		}
+		if (a == 0)
+		{
+			return (NULL);
+		}
+	}
+}
+
+/**
  * **splitString - prints n elements of an array of words
  * followed by a new line
  * @string: input string
@@ -83,7 +110,7 @@ char *_strdup(const char *string)
 char **splitString(const char *string, int *wordCount)
 {
 	const char *delim = " ";
-	char *duplicate  = strdup(string);
+	char *duplicate  = _strdup(string);
 	int count = 0;
 
 	char *token = strtok(duplicate, delim);
@@ -102,44 +129,14 @@ char **splitString(const char *string, int *wordCount)
 		return (NULL);
 	}
 
-	token = strtok(strdup(string), delim);
+	token = strtok(_strdup(string), delim);
 	for (int i = 0; i < count; i++)
 	{
-		words[i] = strdup(token);
+		words[i] = _strdup(token);
 		token = strtok(NULL, delim);
 	}
 
 	free(duplicate);
 	*wordCount = count;
 	return (words);
-}
-/**
- * main - buffers chained commands
- * @argc: address of buffer
- * @argv: address of len var
- * Return: 0
- */
-
-int main(int argc, char **argv)
-{
-	(void)argc;
-	(void)argv;
-	const char* str = "Hello world! Welcome to the programming world.";
-	int wordCount;
-	char** words = splitString(str, &wordCount);
-	
-	if (words != NULL)
-	{
-		printf("Number of words: %d\n", wordCount);
-		for (int i = 0; i < wordCount; i++) {
-			printf("Word %d: %s\n", i + 1, words[i]);
-			free(words[i]);
-		}
-		free(words);
-	}
-	else
-	{
-		printf("Memory allocation failed.\n");
-	}
-	return (0);
 }
