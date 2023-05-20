@@ -88,13 +88,13 @@ char **splitString(const char *string, int *wordCount)
 
 	char *token = strtok(duplicate, delim);
 
-	while (!token)
+	while (token != NULL)
 	{
 		count++;
 		token = strtok(NULL, delim);
 	}
 
-	char **words = malloc(count * sizeof(char *));
+	char **words = malloc(count * sizeof(char));
 
 	if (!words)
 	{
@@ -102,11 +102,10 @@ char **splitString(const char *string, int *wordCount)
 		return (NULL);
 	}
 
-	token = strtok(_strdup(string), delim);
+	token = strtok(strdup(string), delim);
 	for (int i = 0; i < count; i++)
 	{
-		words[i] = malloc(_strlen(token) + 1);
-		_strcpy(words[i], token);
+		words[i] = strdup(token);
 		token = strtok(NULL, delim);
 	}
 
@@ -114,5 +113,33 @@ char **splitString(const char *string, int *wordCount)
 	*wordCount = count;
 	return (words);
 }
+/**
+ * main - buffers chained commands
+ * @argc: address of buffer
+ * @argv: address of len var
+ * Return: 0
+ */
 
-
+int main(int argc, char **argv)
+{
+	(void)argc;
+	(void)argv;
+	const char* str = "Hello world! Welcome to the programming world.";
+	int wordCount;
+	char** words = splitString(str, &wordCount);
+	
+	if (words != NULL)
+	{
+		printf("Number of words: %d\n", wordCount);
+		for (int i = 0; i < wordCount; i++) {
+			printf("Word %d: %s\n", i + 1, words[i]);
+			free(words[i]);
+		}
+		free(words);
+	}
+	else
+	{
+		printf("Memory allocation failed.\n");
+	}
+	return (0);
+}
