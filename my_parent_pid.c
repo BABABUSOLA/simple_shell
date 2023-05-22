@@ -6,3 +6,5 @@
 /**
  * main - PID
  *
+ * Return: Always 0.
+ */
