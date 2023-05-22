@@ -34,3 +34,7 @@ Run `gcc -Wall -Wextra -Werror -pedantic wait.c -o wait && ./wait`
 #Exercise: fork + wait + execve
 
 Run `gcc -Wall -Wextra -Werror -pedantic forkWaitExec.c -o forkWaitExec && ./forkWaitExec`
+
+#Exercise: super simple shell
+
+Run `gcc -Wall -Wextra -Werror -pedantic shell.c -o shell && ./shell`, then when the prompt is displayed type the command of your choice, e.g: /bin/ls or ./{anyexecutablefile available in the folder} i.e ./myparentpid
