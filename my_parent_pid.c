@@ -11,3 +11,5 @@
 int main(void)
 {
     pid_t my_parent_pid;
+
+    my_parent_pid = getppid();
