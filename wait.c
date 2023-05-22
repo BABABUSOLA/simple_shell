@@ -13,4 +13,5 @@ int main(int ac, char **av)
 
 {
     (void)ac;
+    int i = 0;
 
