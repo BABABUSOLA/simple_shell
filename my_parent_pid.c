@@ -14,3 +14,5 @@ int main(void)
 
     my_parent_pid = getppid();
     printf("%u\n", my_parent_pid);
+    return (0);
+}
