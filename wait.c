@@ -1,4 +1,4 @@
-#include "main shell.h"
+#include "main_shell.h"
 
 
 /**
@@ -19,4 +19,9 @@ int main(int ac, char **av)
     {
        printf("%s\n", av[i]);
        i++;
+    }
+
+     return (0);
+}
+
 
