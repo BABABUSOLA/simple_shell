@@ -26,6 +26,8 @@ int main(int ac, char **av)
 		if (stat(av[i], &st) == 0)
 		{
 			printf(" FOUND\n");
+			printf(" FOUND %s\n", __FILE__);
+
 		}
 		else
 		{

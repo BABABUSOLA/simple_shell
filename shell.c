@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 /**
  *forkWaitExecute - fork & wait &execute example
@@ -17,6 +18,7 @@ int forkWaitExecute(char **words)
 	pid_t child_pid;
 	int status;
 	int i = 0;
+	struct stat st;
 
 	while (words[i] != NULL)
 	{
@@ -35,6 +37,15 @@ int forkWaitExecute(char **words)
 			if (execve(words[0], words, NULL) == -1)
 			{
 				perror("Error:");
+			}
+			printf("%s:", words[i]);
+                        if (stat(words[i], &st) == 0)
+			{
+				printf(" FOUND\n");
+			}
+			else
+			{
+				printf(" NOT FOUND\n");
 			}
 			printf("After execve\n");
 		}
@@ -187,13 +198,18 @@ ssize_t my_getline(char **buff, size_t *length)
  */
 int main(int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
 	char *buf = NULL;
 	size_t len = 0;
 	ssize_t nread;
+	unsigned int i;
 
-	while (1)
+	if (argc < 2)
+	{
+		printf("Usage: %s path_to_file ...\n", argv[0]);
+		return (1);
+	}
+	i = 1;
+	while (argv[i])
 	{
 		printf("#cisfun$ ");
 		fflush(stdout);
@@ -204,7 +220,7 @@ int main(int argc, char **argv)
 		if (nread > 0 && buf[nread - 1] == '\n')
 			buf[nread - 1] = '\0';
 		char **words = strtow(buf);
-
+		
 		if (words != NULL)
 		{
 			forkWaitExecute(words);
@@ -221,6 +237,7 @@ int main(int argc, char **argv)
 		printf("End of input (EOF) reached.\n");
 		break;
 	}
+	i++;
 	}
 	free(buf);
 	return (0);
