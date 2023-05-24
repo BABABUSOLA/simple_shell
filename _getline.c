@@ -13,6 +13,7 @@ ssize_t my_getline(char **buff, size_t *length)
 	ssize_t nread = 0;
 	ssize_t position = 0;
 	int n;
+	char *buff_new;
 
 	if (!buff || !length)
 	{
@@ -32,7 +33,7 @@ ssize_t my_getline(char **buff, size_t *length)
 		if (position >= (ssize_t)(*length) - 1)
 		{
 			*length *= 2;
-			char *buff_new = realloc(*buff, *length);
+			buff_new = realloc(*buff, *length);
 
 			if (!buff_new)
 				return (-1);

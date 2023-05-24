@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main_shell.h"
 
 void executer(char **argv){
 	char *cmd = NULL, *cmd_main = NULL;
@@ -11,7 +11,8 @@ void executer(char **argv){
 		cmd_main = getPath(cmd);
 
         /* execute the actual command with execve */
-		if (execve(cmd_main, argv, NULL) == -1){
+		if (execve(cmd_main, argv, NULL) == -1)
+		{
 			perror("Error:");
 		}
 	}

@@ -1,4 +1,4 @@
-#include "main.h"
+#include "main_shell.h"
 
 char *getPath(char *cmd){
     char *path, *duplicate_path, *token, *file_path;
@@ -6,10 +6,11 @@ char *getPath(char *cmd){
     struct stat st;
     
     path = getenv("PATH");
-
     if (path){
         /* Duplicate the path string -> remember to free up memory for this because strdup allocates memory that needs to be freed*/ 
         duplicate_path = strdup(path);
+
+	printf("Current Path: %s\n", duplicate_path);
         /* Get length of the command that was passed */
         len_cmd = strlen(cmd);
 
@@ -29,7 +30,7 @@ char *getPath(char *cmd){
             strcat(file_path, "\0");
 
             /* let's test if this file path actually exists and return it if it does, otherwise try the next directory */
-            if (stat(path, &st) == 0){
+            if (stat(file_path, &st) == 0){
                 /* return value of 0 means success implying that the file_path is valid*/
 
                 /* free up allocated memory before returning your file_path */

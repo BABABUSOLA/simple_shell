@@ -82,53 +82,6 @@ char **strtow(char *str)
 }
 
 /**
- * my_getline - buffers chained commands
- * @buff: address of buffer
- * @length: address of len var
- *
- * Return: 0
- */
-
-ssize_t my_getline(char **buff, size_t *length)
-{
-	ssize_t nread = 0;
-	ssize_t position = 0;
-	int n;
-
-	if (!buff || !length)
-	{
-		return (-1);
-	}
-	if (!*buff || *length == 0)
-	{
-		*length =  128;
-		*buff = malloc(*length);
-		if (!*buff)
-		{
-			return (-1);
-		}
-	}
-	while ((n = getchar()) != '\n' && n != EOF)
-	{
-		if (position >= (ssize_t)(*length) - 1)
-		{
-			*length *= 2;
-			char *buff_new = realloc(*buff, *length);
-
-			if (!buff_new)
-				return (-1);
-			*buff = buff_new;
-		}
-		(*buff)[position++] = n;
-	}
-	if (n == EOF || length == 0)
-		return (-1);
-
-	(*buff)[position] = '\0';
-		return (nread);
-}
-
-/**
  * main - buffers chained commands
  * @argc: address of buffer
  * @argv: address of len var
@@ -136,15 +89,15 @@ ssize_t my_getline(char **buff, size_t *length)
  */
 int main(int argc, char **argv)
 {
-	(void)argc;
-	(void)**argv;
-	char *buf = NULL, *buf_copy = NULL, *prompt = "$ ";
+	char *buf = NULL, *buf_copy = NULL;
+	char *prompt = "$ ";
 	size_t len = 0;
 	ssize_t nread;
 	const char *delimiter = " \n";
 	int word_count = 0;
-	chart *words;
+	char *words;
 	int i;
+	(void)argc; 
 
 	while (1)
 	{
@@ -153,11 +106,11 @@ int main(int argc, char **argv)
 			write(STDOUT_FILENO, prompt, 2);
 		}
 		fflush(stdout);
-	#if USE_GETLINE
+	/*#if USE_GETLINE*/
 		nread = getline(&buf, &len, stdin);
-	#else
-		nread = my_getline(&buf, &len);
-	#endif
+	/*#else*/
+		/*nread = my_getline(&buf, &len);*/
+	/*#endif*/
 	if (nread == -1)
 	{
 		perror("Error (getline)");
@@ -165,7 +118,7 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 	buf_copy = malloc(sizeof(char) * nread);
-	if (!buf_copy)
+	if (buf_copy == NULL)
 	{
 		perror("Error: memmory allocation error");
 		exit(EXIT_FAILURE);
@@ -186,13 +139,13 @@ int main(int argc, char **argv)
 	argv = malloc(sizeof(char *) * word_count);
 
 	/*store each token in the argv array */
-	words = strtok(buf_copy, delim);
+	words = strtok(buf_copy, delimiter);
 
 	while (words != NULL)
 	{
 		argv[i] = malloc(sizeof(char) * (strlen(words) + 1));
 		strcpy(argv[i], words);
-		words = strtok(NULL, delim);
+		words = strtok(NULL, delimiter);
 		i++;
 	}
 	argv[i] = NULL;
