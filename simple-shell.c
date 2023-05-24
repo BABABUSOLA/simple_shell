@@ -7,54 +7,6 @@
 #include <sys/stat.h>
 
 /**
- *forkWaitExecute - fork & wait &execute example
- *@words: The array of the arguments
- *
- * Return: Always 0.
- */
-int forkWaitExecute(char **words, char **env)
-{
-	pid_t child_pid;
-	int status;
-	int i = 0;
-	struct stat st;
-
-	while (words[i] != NULL)
-	{
-		child_pid = fork();
-		if (child_pid == -1)
-		{
-			perror("Error:");
-			exit(EXIT_FAILURE);
-		}
-		if (child_pid == 0)
-		{
-			if (execve(words[0], words, env) == -1)
-			{
-				perror("Error:");
-				exit(EXIT_FAILURE);
-			}
-			if (stat(words[i], &st) == 0)
-			{
-				printf(" FOUND\n");
-			}
-			else
-			{
-				printf(" NOT FOUND\n");
-			}
-		}
-		if (waitpid(child_pid, &status, 0) == -1)
-		{
-			perror("Error (wait)");
-			exit(EXIT_FAILURE);
-		}
-	i++;
-	}
-	return (0);
-}
-
-
-/**
  * count_word - helper function to count the number of words in a string
  * @s: string to evaluate
  *
@@ -182,14 +134,17 @@ ssize_t my_getline(char **buff, size_t *length)
  * @argv: address of len var
  * Return: 0
  */
-int main(int argc, char **argv, char **env)
+int main(int argc, char **argv)
 {
 	(void)argc;
 	(void)**argv;
-	(void)**env;
-	char *buf = NULL, *prompt = "$ ";
+	char *buf = NULL, *buf_copy = NULL, *prompt = "$ ";
 	size_t len = 0;
 	ssize_t nread;
+	const char *delimiter = " \n";
+	int word_count = 0;
+	chart *words;
+	int i;
 
 	while (1)
 	{
@@ -198,25 +153,56 @@ int main(int argc, char **argv, char **env)
 			write(STDOUT_FILENO, prompt, 2);
 		}
 		fflush(stdout);
+	#if USE_GETLINE
+		nread = getline(&buf, &len, stdin);
+	#else
 		nread = my_getline(&buf, &len);
+	#endif
 	if (nread == -1)
 	{
 		perror("Error (getline)");
 		free(buf);
 		exit(EXIT_FAILURE);
 	}
-	
-	if (nread > 0 && buf[nread - 1] == '\n')
-		buf[nread - 1] = '\0';
-	char **words = strtow(buf);
-	
-	if (words != NULL)
+	buf_copy = malloc(sizeof(char) * nread);
+	if (!buf_copy)
 	{
-		forkWaitExecute(words, env);
-		free(words);
+		perror("Error: memmory allocation error");
+		exit(EXIT_FAILURE);
 	}
+	/*copy buf to buf_copy */
+	strcpy(buf_copy, buf);
+	/*calculate the toal number of tokens*/
+	words = strtok(buf, delimiter);
+
+	while (words != NULL)
+	{
+		word_count++;
+		words = strtok(NULL, delimiter);
+	}
+	word_count++;
+
+	/*Allocate space to hold the arrau of strings */
+	argv = malloc(sizeof(char *) * word_count);
+
+	/*store each token in the argv array */
+	words = strtok(buf_copy, delim);
+
+	while (words != NULL)
+	{
+		argv[i] = malloc(sizeof(char) * (strlen(words) + 1));
+		strcpy(argv[i], words);
+		words = strtok(NULL, delim);
+		i++;
+	}
+	argv[i] = NULL;
+
+	/*execute the command*/
+	executer(argv);
 	
 	}
+	/*free up allocated memory*/
+	free(buf_copy);
 	free(buf);
 	return (0);
 }
