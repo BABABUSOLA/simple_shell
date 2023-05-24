@@ -14,11 +14,11 @@ int _strlen(const char *s);
 char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *string);
 char **splitString(const char *string, int *wordCount);
-
 char **strtow(char *str);
 
 ssize_t my_getline(char **buff, size_t *length);
 
 void executer(char **argv);
 char *getPath(char *command);
+
 #endif
