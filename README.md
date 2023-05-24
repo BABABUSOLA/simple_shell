@@ -34,3 +34,17 @@ Run `gcc -Wall -Wextra -Werror -pedantic wait.c -o wait && ./wait`
 #Exercise: fork + wait + execve
 
 Run `gcc -Wall -Wextra -Werror -pedantic forkWaitExec.c -o forkWaitExec && ./forkWaitExec`
+
+#Exercise: super simple shell
+
+Run `gcc -Wall -Wextra -Werror -pedantic shell.c -o shell && ./shell`, then when the prompt is displayed type the command of your choice, e.g: /bin/ls or ./{anyexecutablefile available in the folder} i.e ./myparentpid
+
+#Exercise: fie information
+
+Run `gcc -Wall -Wextra -Werror -pedantic stat.c -o stat`, to create the stat file, then run, `./stat ls /bin/ls /usr/bin/ls`, this then runs the file start with the 3 arguments ls /bin/ls and /usr/bin/ls
+
+#Exercise: Environment
+
+Exercise 0: Run `gcc -Wall -Werror -pedantic env-main.c -o printenv && ./printenv` this will generate the environment variable available using the global variable
+
+Exercise 1: Run `gcc -Wall -Werror -pedantic env.c -o printenv && ./printenv` this will generate the environment variable available using the global variable and also the address of the env from main and the env from the environ and they are the same result
