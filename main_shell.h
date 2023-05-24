@@ -18,6 +18,6 @@ char **strtow(char *str);
 
 ssize_t my_getline(char **buff, size_t *length);
 
-int main(int argc, char **argv);
+int main(int argc, char **argv, char **env);
 //int main(int ac, char **av);
 #endif

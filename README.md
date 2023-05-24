@@ -46,3 +46,5 @@ Run `gcc -Wall -Wextra -Werror -pedantic stat.c -o stat`, to create the stat fil
 #Exercise: Environment
 
 Exercise 0: Run `gcc -Wall -Werror -pedantic env-main.c -o printenv && ./printenv` this will generate the environment variable available using the global variable
+
+Exercise 1: Run `gcc -Wall -Werror -pedantic env.c -o printenv && ./printenv` this will generate the environment variable available using the global variable and also the address of the env from main and the env from the environ and they are the same result
