@@ -1,33 +1,27 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
+#include "main_shell.h"
+
 
 /**
- * main - fork & wait example
+ * main - prints all arguments it receives
+ * @ac: number of arguments
+ * @av: array of arguments
  *
- * Return: Always 0.
+ * Return: Always 0(success)
  */
-int main(void)
-{
-	pid_t child_pid;
-	int status;
 
-	child_pid = fork();
-	if (child_pid == -1)
-	{
-		perror("Error:");
-		return (1);
-	}
-	if (child_pid == 0)
-	{
-		printf("Wait for me, wait for me\n");
-		sleep(3);
-	}
-	else
-	{
-		wait(&status);
-		printf("Oh, it's all better now\n");
-	}
-	return (0);
+int main(int ac, char **av)
+
+{
+    (void)ac;
+    int i = 0;
+
+    while (av[i] != NULL)
+    {
+       printf("%s\n", av[i]);
+       i++;
+    }
+
+     return (0);
 }
+
+
