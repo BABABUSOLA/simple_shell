@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "main_shell.h"
 
 #include <stdio.h>
@@ -13,7 +12,7 @@
  *
  * Return: Always 0.
  */
-int forkWaitExecute(char **words)
+int forkWaitExecute(char **words, char **env)
 {
 	pid_t child_pid;
 	int status;
@@ -26,20 +25,16 @@ int forkWaitExecute(char **words)
 		if (child_pid == -1)
 		{
 			perror("Error:");
-			return (1);
+			exit(EXIT_FAILURE);
 		}
 		if (child_pid == 0)
 		{
-			printf("Wait for me, wait for me\n");
-			sleep(3);
-
-			printf("Before execve\n");
-			if (execve(words[0], words, NULL) == -1)
+			if (execve(words[0], words, env) == -1)
 			{
 				perror("Error:");
+				exit(EXIT_FAILURE);
 			}
-			printf("%s:", words[i]);
-                        if (stat(words[i], &st) == 0)
+			if (stat(words[i], &st) == 0)
 			{
 				printf(" FOUND\n");
 			}
@@ -47,20 +42,11 @@ int forkWaitExecute(char **words)
 			{
 				printf(" NOT FOUND\n");
 			}
-			printf("After execve\n");
 		}
-		else
+		if (waitpid(child_pid, &status, 0) == -1)
 		{
-			wait(&status);
-			if (WIFEXITED(status))
-			{
-				printf("Child process ID %d exited with status: %d\n",
-						child_pid, WEXITSTATUS(status));
-			}
-			else
-			{
-			printf("Child process ID %d terminated abnormally\n", child_pid);
-			}
+			perror("Error (wait)");
+			exit(EXIT_FAILURE);
 		}
 	i++;
 	}
@@ -196,48 +182,40 @@ ssize_t my_getline(char **buff, size_t *length)
  * @argv: address of len var
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **env)
 {
-	char *buf = NULL;
+	(void)argc;
+	(void)**argv;
+	(void)**env;
+	char *buf = NULL, *prompt = "$ ";
 	size_t len = 0;
 	ssize_t nread;
-	unsigned int i;
 
-	if (argc < 2)
+	while (1)
 	{
-		printf("Usage: %s path_to_file ...\n", argv[0]);
-		return (1);
-	}
-	i = 1;
-	while (argv[i])
-	{
-		printf("#cisfun$ ");
+		if(isatty(STDIN_FILENO) == 1)
+		{
+			write(STDOUT_FILENO, prompt, 2);
+		}
 		fflush(stdout);
 		nread = my_getline(&buf, &len);
-
-	if (nread != -1)
+	if (nread == -1)
 	{
-		if (nread > 0 && buf[nread - 1] == '\n')
-			buf[nread - 1] = '\0';
-		char **words = strtow(buf);
-		
-		if (words != NULL)
-		{
-			forkWaitExecute(words);
-			free(words);
-		}
-		else
-		{
-			printf("Memory allocation failed.Input a valid arg\n");
-		}
-		printf("%s\n", buf);
+		perror("Error (getline)");
+		free(buf);
+		exit(EXIT_FAILURE);
 	}
-	else
+	
+	if (nread > 0 && buf[nread - 1] == '\n')
+		buf[nread - 1] = '\0';
+	char **words = strtow(buf);
+	
+	if (words != NULL)
 	{
-		printf("End of input (EOF) reached.\n");
-		break;
+		forkWaitExecute(words, env);
+		free(words);
 	}
-	i++;
+	
 	}
 	free(buf);
 	return (0);

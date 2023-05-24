@@ -16,7 +16,7 @@ int main(int ac, char **av)
 
 	if (ac < 2)
 	{
-		printf("Usage: %s path_to_file ...\n", av[0]);
+		printf("Usage: %s filename ...\n", av[0]);
 		return (1);
 	}
 	i = 1;
@@ -26,6 +26,8 @@ int main(int ac, char **av)
 		if (stat(av[i], &st) == 0)
 		{
 			printf(" FOUND\n");
+			printf(" FOUND %s\n", __FILE__);
+
 		}
 		else
 		{

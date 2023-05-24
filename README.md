@@ -42,3 +42,9 @@ Run `gcc -Wall -Wextra -Werror -pedantic shell.c -o shell && ./shell`, then when
 #Exercise: fie information
 
 Run `gcc -Wall -Wextra -Werror -pedantic stat.c -o stat`, to create the stat file, then run, `./stat ls /bin/ls /usr/bin/ls`, this then runs the file start with the 3 arguments ls /bin/ls and /usr/bin/ls
+
+#Exercise: Environment
+
+Exercise 0: Run `gcc -Wall -Werror -pedantic env-main.c -o printenv && ./printenv` this will generate the environment variable available using the global variable
+
+Exercise 1: Run `gcc -Wall -Werror -pedantic env.c -o printenv && ./printenv` this will generate the environment variable available using the global variable and also the address of the env from main and the env from the environ and they are the same result
