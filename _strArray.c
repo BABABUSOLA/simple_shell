@@ -57,13 +57,14 @@ char *_strcpy(char *dest, const char *src)
 char *_strdup(const char *string)
 {
 	int length = 0;
+	char *newString;
 
 	while (string[length] != '\0')
 	{
 		length++;
 	}
 
-	char *newString = malloc((length + 1) * sizeof(char));
+	newString = malloc((length + 1) * sizeof(char));
 
 	if (newString != NULL)
 	{
@@ -112,8 +113,9 @@ char **splitString(const char *string, int *wordCount)
 	const char *delim = " ";
 	char *duplicate  = _strdup(string);
 	int count = 0;
-
+	char **words;
 	char *token = strtok(duplicate, delim);
+	int i;
 
 	while (token != NULL)
 	{
@@ -121,7 +123,7 @@ char **splitString(const char *string, int *wordCount)
 		token = strtok(NULL, delim);
 	}
 
-	char **words = malloc(count * sizeof(char));
+	words = malloc(count * sizeof(char));
 
 	if (!words)
 	{
@@ -130,10 +132,11 @@ char **splitString(const char *string, int *wordCount)
 	}
 
 	token = strtok(_strdup(string), delim);
-	for (int i = 0; i < count; i++)
+	while (i < count)
 	{
 		words[i] = _strdup(token);
 		token = strtok(NULL, delim);
+		i++;
 	}
 
 	free(duplicate);
