@@ -12,12 +12,13 @@ int _strlen(const char *s);
 char *_strcpy(char *dest, const char *src);
 char *_strdup(const char *string);
 char **splitString(const char *string, int *wordCount);
-// char *_strchr(char *s, char c)
+char *_strchr(char *s, char c)
 char **strtow(char *str);
 
 ssize_t my_getline(char **buff, size_t *length);
 
-int main(int ac, char **av);
-// int main(int argc, char **argv);
+/* int main(int ac, char **av); */
+
+int main(int argc, char **argv);
 
 #endif

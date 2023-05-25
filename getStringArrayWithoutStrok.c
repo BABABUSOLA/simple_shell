@@ -75,16 +75,17 @@ char **strtow(const char *str)
 
 	return (matrix);
 }
-int main()
+int main(void)
 {
-	const char* str = "Hello world! Welcome to the programming world.";
+	const char *str = "Hello world! Welcome to the programming world.";
 	int wordCount = count_word(str);
-	char** words = strtow(str);
-	
+	char *words = strtow(str);
+
 	if (words != NULL)
 	{
 		printf("Number of words: %d\n", wordCount);
-		for (int i = 0; i < wordCount; i++) {
+		for (int i = 0; i < wordCount; i++)
+		{
 			printf("Word %d: %s\n", i + 1, words[i]);
 			free(words[i]);
 		}

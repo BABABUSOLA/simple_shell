@@ -40,7 +40,7 @@ int main(void)
 		{
 			wait(&status);
 			printf("Oh, it's all better now\n");
-			if(WIFEXITED(status))
+			if (WIFEXITED(status))
 			{
 				printf("Child process ID %d exited with status: %d\n", child_pid, WEXITSTATUS(status));
 			}
