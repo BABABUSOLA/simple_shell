@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+void print_prompt(const char *prompt) {
+    write(STDOUT_FILENO, prompt, strlen(prompt));
+}
+
+char *read_input() {
+    char *buf = NULL;
+    size_t len = 0;
+    ssize_t nread;
+
+    nread = getline(&buf, &len, stdin);
+    if (nread == -1) {
+        perror("Error (getline)");
+        free(buf);
+        exit(EXIT_FAILURE);
+    } else if (nread > 0 && buf[nread - 1] == '\n') {
+        buf[nread - 1] = '\0';
+    }
+
+    return buf;
+}
+
+char **split_input(char *input, int *word_count) {
+    const char *delimiter = " \n";
+    char *token;
+    int i = 0;
+
+    token = strtok(input, delimiter);
+    while (token != NULL) {
+        (*word_count)++;
+        token = strtok(NULL, delimiter);
+    }
+    (*word_count)++;
+
+    char **argv = malloc(sizeof(char *) * (*word_count));
+    if (argv == NULL) {
+        perror("Error: memory allocation error");
+        exit(EXIT_FAILURE);
+    }
+
+    token = strtok(input, delimiter);
+    while (token != NULL) {
+        argv[i] = malloc(sizeof(char) * (strlen(token) + 1));
+        if (argv[i] == NULL) {
+            perror("Error: memory allocation error");
+            exit(EXIT_FAILURE);
+        }
+        strcpy(argv[i], token);
+        token = strtok(NULL, delimiter);
+        i++;
+    }
+    argv[i] = NULL;
+
+    return argv;
+}
+
+void execute_command(char **argv) {
+    pid_t pid;
+    int status;
+
+    pid = fork();
+    if (pid == -1) {
+        perror("Error forking process");
+        exit(EXIT_FAILURE);
+    } 
+    if (pid == 0) {
+        // Child process
+        if (execvp(argv[0], argv) == -1) {
+            perror("Error executing command");
+            exit(EXIT_FAILURE);
+        }
+    } else {
+        // Parent process
+        waitpid(pid, &status, 0);
+    }
+}
+
+void free_argv(char **argv) {
+    if (argv == NULL) {
+        return;
+    }
+
+    for (int i = 0; argv[i] != NULL; i++) {
+        free(argv[i]);
+    }
+    free(argv);
+}
+
+int main(int argc, char **argv) {
+    char *buf;
+    char *prompt = "$ ";
+    int word_count = 0;
+    char **tokens;
+    (void) argc;
+    (void) argv;
+
+    while (1) {
+        print_prompt(prompt);
+        fflush(stdout);
+
+        buf = read_input();
+        tokens = split_input(buf, &word_count);
+
+        execute_command(tokens);
+
+        free_argv(tokens);
+        free(buf);
+    }
+
+    return 0;
+}
+

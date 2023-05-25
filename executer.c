@@ -5,25 +5,27 @@
  * Return: Always 0.
  */
 
-void executer(char **argv)
+int executer(char **argv)
 {
 	char *cmd = NULL, *cmd_main = NULL;
 	int i = 0;
 	pid_t child_pid;
 	int status;
 
-	/*if (argv)*/
-	/*{*/
-		/*cmd = argv[0]; get the command */
+	if (argv)
+	{
+		cmd = argv[0]; /*get the command */
 	while (argv[i] != NULL)
 	{
 		child_pid = fork();
 		if (child_pid == -1)
 		{
-			perror("Error: child pid");
+			perror("Error: fork failed");
+			return (1);
 		}
 		if (child_pid == 0)
 		{
+			sleep (3);
 			cmd = argv[i];
         /* generate the path b4 taking it to execve */
 			cmd_main = getPath(cmd);
@@ -32,7 +34,9 @@ void executer(char **argv)
 			if (execve(cmd_main, argv, NULL) == -1)
 			{
 				perror("Error:");
+				return (1);
 			}
+			exit (1);
 		}
 		else
 		{
@@ -46,5 +50,6 @@ void executer(char **argv)
 
 	i++;
 	}
-	/*}*/
+	}
+	return (0);
 }
