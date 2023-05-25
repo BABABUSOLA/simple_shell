@@ -101,10 +101,10 @@ int main(int argc, char **argv)
 
 	while (1)
 	{
-		if(isatty(STDIN_FILENO) == 1)
-		{
+		/*if(isatty(STDIN_FILENO) == 1)*/
+		/*{*/
 			write(STDOUT_FILENO, prompt, 2);
-		}
+		/*}*/
 		fflush(stdout);
 	/*#if USE_GETLINE*/
 		nread = getline(&buf, &len, stdin);
@@ -117,6 +117,11 @@ int main(int argc, char **argv)
 		free(buf);
 		exit(EXIT_FAILURE);
 	}
+	else
+	{
+	if (nread > 0 && buf[nread - 1] == '\n')
+			buf[nread - 1] = '\0';
+
 	buf_copy = malloc(sizeof(char) * nread);
 	if (buf_copy == NULL)
 	{
@@ -127,7 +132,7 @@ int main(int argc, char **argv)
 	strcpy(buf_copy, buf);
 	/*calculate the toal number of tokens*/
 	words = strtok(buf, delimiter);
-
+	
 	while (words != NULL)
 	{
 		word_count++;
@@ -153,6 +158,7 @@ int main(int argc, char **argv)
 	/*execute the command*/
 	executer(argv);
 	
+	}
 	}
 	/*free up allocated memory*/
 	free(buf_copy);
