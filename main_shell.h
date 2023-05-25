@@ -18,7 +18,7 @@ char **strtow(char *str);
 
 ssize_t my_getline(char **buff, size_t *length);
 
-void executer(char **argv);
+int executer(char **argv);
 char *getPath(char *command);
 
 #endif
