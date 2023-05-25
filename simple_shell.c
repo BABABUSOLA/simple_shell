@@ -40,6 +40,7 @@ char **split_input(char *input, int *word_count)
 {
     const char *delimiter = " \n";
     char *token;
+    char **argv;
     int i = 0;
 
     token = strtok(input, delimiter);
@@ -50,7 +51,7 @@ char **split_input(char *input, int *word_count)
     }
     (*word_count)++;
 
-    char **argv = malloc(sizeof(char *) * (*word_count));
+    argv = malloc(sizeof(char *) * (*word_count));
     if (argv == NULL)
     {
         perror("Error: memory allocation error");
@@ -92,20 +93,19 @@ void execute_command(char **argv)
         }
         else if (pid == 0)
         {
-            // Child process
 	    cmd = argv[i];
         /* generate the path b4 taking it to execve */
                 cmd_main = getPath(cmd);
-        // Child process
+        /* Child process*/
         if (execve(cmd_main, argv, NULL) == -1)
             {
-                perror("Error: execvp");
+                perror("Error: execve");
                 exit(EXIT_FAILURE);
             }
         }
         else
         {
-            // Parent process
+            /* Parent process*/
             if (waitpid(pid, &status, 0) == -1)
             {
                 perror("Error: waitpid");
@@ -118,14 +118,16 @@ void execute_command(char **argv)
 
 void free_argv(char **argv)
 {
+	int i = 0;
     if (argv == NULL)
     {
         return;
     }
 
-    for (int i = 0; argv[i] != NULL; i++)
+    while (argv[i] != NULL)
     {
         free(argv[i]);
+	i++;
     }
     free(argv);
 }
@@ -134,17 +136,20 @@ int main(int argc, char **argv)
 {
     char *buf;
     char *prompt = "$ ";
-    int word_count = 0;
+    int word_count;
+    char **tokens;
     (void) argc;
     (void) argv;
+    /*Start at index 1 to skip the program name*/
 
     while (1)
     {
         print_prompt(prompt);
         fflush(stdout);
+	word_count = 0;
 
         buf = read_input();
-        char **tokens = split_input(buf, &word_count);
+        tokens = split_input(buf, &word_count);
 
         execute_command(tokens);
 
@@ -152,6 +157,6 @@ int main(int argc, char **argv)
         free(buf);
     }
 
-    return 0;
+    return (0);
 }
 
