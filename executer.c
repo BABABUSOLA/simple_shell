@@ -29,12 +29,12 @@ int executer(char **argv)
 			cmd = argv[i];
         /* generate the path b4 taking it to execve */
 			cmd_main = getPath(cmd);
-
         /* execute the actual command with execve */
 			if (execve(cmd_main, argv, NULL) == -1)
 			{
-				perror("Error:");
-				return (1);
+				perror(cmd_main); /* task 1 */
+				/*free_all(buff, cmd_args) task 2 */
+				exit(EXIT_FAILURE);
 			}
 			exit (1);
 		}

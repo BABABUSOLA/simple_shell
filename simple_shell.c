@@ -20,17 +20,25 @@ char *read_input()
     char *buf = NULL;
     size_t len = 0;
     ssize_t nread;
+    int line_count = 0;
 
     nread = getline(&buf, &len, stdin);
     if (nread == -1)
     {
-        perror("Error (getline)");
+        /*perror();*/
         free(buf);
         exit(EXIT_FAILURE);
     }
     else if (nread > 0 && buf[nread - 1] == '\n')
     {
         buf[nread - 1] = '\0';
+    }
+	 /* Update line count*/
+    while (nread > 0) {
+        if (buf[nread - 1] == '\n') {
+            line_count++;
+        }
+        nread--;
     }
 
     return buf;
@@ -96,11 +104,13 @@ void execute_command(char **argv)
 	    cmd = argv[i];
         /* generate the path b4 taking it to execve */
                 cmd_main = getPath(cmd);
+
         /* Child process*/
-        if (execve(cmd_main, argv, NULL) == -1)
+        if (execve(cmd_main, argv, environ) == -1)
             {
-                perror("Error: execve");
-                exit(EXIT_FAILURE);
+		    if (errno == EACCES)
+				exit(126);
+			exit(1);
             }
         }
         else
@@ -144,13 +154,26 @@ int main(int argc, char **argv)
 
     while (1)
     {
-        print_prompt(prompt);
+	    print_prompt(prompt);
         fflush(stdout);
 	word_count = 0;
 
         buf = read_input();
         tokens = split_input(buf, &word_count);
-
+	/* Check if the input is empty*/
+        if (tokens[0] == NULL)
+        {
+            free_argv(tokens);
+            free(buf);
+            continue;
+        }
+	/* Check for the special command: "exit"*/
+        if (_strcmp(tokens[0], "exit") == 0)
+        {
+            free_argv(tokens);
+            free(buf);
+            break;
+        }
         execute_command(tokens);
 
         free_argv(tokens);
