@@ -1,62 +1,87 @@
 #include "main_shell.h"
 
 /**
- * *getPath - stat example
- * @cmd: array of arguments
- * Return: Always 0.
+ * is_cmd - determines if a file is an executable command
+ * @info: the info struct
+ * @path: path to the file
+ *
+ * Return: 1 if true, 0 otherwise
  */
-char *getPath(char *cmd)
+int is_cmd(info_t *info, char *path)
 {
-	char *path, *duplicate_path, *token, *file_path;
-	int len_cmd, len_dir;
 	struct stat st;
 
-	path = getenv("PATH");
-	if (path)
+	(void)info;
+	if (!path || stat(path, &st))
+		return (0);
+
+	if (st.st_mode & S_IFREG)
 	{
-		/* Duplicate the path string and free up memory*/ 
-		duplicate_path = strdup(path);
-		
-		/* Get length of the command that was passed */
-		len_cmd = strlen(cmd);
-		/*break down the path variable, getthe directories available*/
-		token = strtok(duplicate_path, ":");
-		while (token != NULL)
-		{
-			/* Get the length of the directory*/
-			len_dir = strlen(token);
-			/* allocate memory for storing len_cmd and len_dir */
-			file_path = malloc(len_cmd + len_dir + 2); /* NB: we added 2 for the slash and null character we will introduce in the full command */
-           		 /* to build the path for the command, copy the file_path and concatenate the command */
-			strcpy(file_path, token);
-			strcat(file_path, "/");
-			strcat(file_path, cmd);
-			strcat(file_path, "\0");
-
-			/* test for file path existenc and return it true, else check next directory */
-			if (stat(file_path, &st) == 0)
-			{
-				/* return value of 0 means success i.e file_path is valid*/
-				/* free up allocated memory before returning your file_path */
-				free(duplicate_path);
-				return (file_path);
-			}
-			/* free up the file_path memory so we can check for another path*/
-			free(file_path);
-			token = strtok(NULL, ":");
-		}
-		/* if we don't get any file_path that exists for the command, we return NULL but we need to free up memory for path_copy */ 
-		free(duplicate_path);
-		/* before we exit without luck, let's see if the command itself is a file_path that exists */
-		if (stat(cmd, &st) == 0)
-		{
-			return (cmd);
-		}
-
-        return (NULL);
-    
-    }
-
-
-    return (NULL);
+		return (1);
+	}
+	return (0);
 }
+
+/**
+ * dup_chars - duplicates characters
+ * @pathstr: the PATH string
+ * @start: starting index
+ * @stop: stopping index
+ *
+ * Return: pointer to new buffer
+ */
+char *dup_chars(char *pathstr, int start, int stop)
+{
+	static char buf[1024];
+	int i = 0, k = 0;
+
+	for (k = 0, i = start; i < stop; i++)
+		if (pathstr[i] != ':')
+			buf[k++] = pathstr[i];
+	buf[k] = 0;
+	return (buf);
+}
+
+/**
+ * find_path - finds this cmd in the PATH string
+ * @info: the info struct
+ * @pathstr: the PATH string
+ * @cmd: the cmd to find
+ *
+ * Return: full path of cmd if found or NULL
+ */
+char *find_path(info_t *info, char *pathstr, char *cmd)
+{
+	int i = 0, curr_pos = 0;
+	char *path;
+
+	if (!pathstr)
+		return (NULL);
+	if ((_strlen(cmd) > 2) && starts_with(cmd, "./"))
+	{
+		if (is_cmd(info, cmd))
+			return (cmd);
+	}
+	while (1)
+	{
+		if (!pathstr[i] || pathstr[i] == ':')
+		{
+			path = dup_chars(pathstr, curr_pos, i);
+			if (!*path)
+				_strcat(path, cmd);
+			else
+			{
+				_strcat(path, "/");
+				_strcat(path, cmd);
+			}
+			if (is_cmd(info, path))
+				return (path);
+			if (!pathstr[i])
+				break;
+			curr_pos = i;
+		}
+		i++;
+	}
+	return (NULL);
+}
+
