@@ -6,7 +6,7 @@
  * Return: 0 if no numbers in string, converted number otherwise
  *       -1 on error
  */
-int _errstringtoi(char *s)
+int _errorstringtoi(char *s)
 {
 	int i = 0;
 	unsigned long int result = 0;
@@ -110,8 +110,7 @@ char *convert_number(long int num, int base, int flags)
 	ptr = &buffer[49];
 	*ptr = '\0';
 
-	do
-	{
+	do {
 		*--ptr = array[n % base];
 		n /= base;
 	} while (n != 0);
