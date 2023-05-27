@@ -43,7 +43,7 @@ void process_input(info_t *info, char **av)
 /**
  * handle_exit_conditions - handle the exit condition
  * @info: the parameter & return info struct
- *
+ * @builtin_ret: the exit status 
  * Return: 0 on success, 1 on error, or error code
  */
 void handle_exit_conditions(info_t *info, int builtin_ret)

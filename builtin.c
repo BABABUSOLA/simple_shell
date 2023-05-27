@@ -1,11 +1,9 @@
 #include "main_shell.h"
 
 /**
- * print_int_error - prints initial error message
- * @info: the parameter & return info struct
- * @estr: string containing specified error type
- * Return: 0 if no numbers in string, converted number otherwise
- *        -1 on error
+ * print_init_error - prints initial error message
+ * @av: argument array
+ * Return: void
  */
 
 void print_init_error(char **av)
