@@ -14,7 +14,7 @@ int shloop(info_t *info, char **av)
 
 	process_input(info, av);
 	handle_exit_conditions(info, builtin_ret);
-	
+
 	return (builtin_ret);
 }
 

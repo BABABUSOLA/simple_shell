@@ -35,22 +35,21 @@ void process_input(info_t *info, char **av)
 			_eputchar('\n');
 		}
 		free_info(info, 0);
-	}
-	while (r != -1 && builtin_ret != -2);
+	} while (r != -1 && builtin_ret != -2);
 }
 
 
 /**
  * handle_exit_conditions - handle the exit condition
  * @info: the parameter & return info struct
- * @builtin_ret: the exit status 
+ * @builtin_ret: the exit status
  * Return: 0 on success, 1 on error, or error code
  */
 void handle_exit_conditions(info_t *info, int builtin_ret)
 {
 	write_history(info);
 	free_info(info, 1);
-	
+
 	if (!interact(info) && info->status)
 	{
 		exit(info->status);
