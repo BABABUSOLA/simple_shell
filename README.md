@@ -95,6 +95,14 @@ Run `gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh && ./hsh`
 ## Output
 
 Unless specified otherwise, your program must have the exact same output as `sh (/bin/sh)` as well as the exact same error output.
-The only difference is when you print an error, the name of the program must be equivalent to your `argc[0]`
+The only difference is when you print an error, the name of the program must be equivalent to your `argc[0]
+
+## Test script
+
+Run `./check.sh | less -r`, if all is successful then the checker passed it all
+
+## Authors
+
+Run the `authors` file, there is a bash script that generates the AITHORS file.
 
 
