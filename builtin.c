@@ -1,6 +1,23 @@
 #include "main_shell.h"
 
 /**
+ * print_int_error - prints initial error message
+ * @info: the parameter & return info struct
+ * @estr: string containing specified error type
+ * Return: 0 if no numbers in string, converted number otherwise
+ *        -1 on error
+ */
+
+void print_init_error(char **av)
+{
+	_eputs(av[0]);
+	_eputs(": 0: Can't open ");
+	_eputs(av[1]);
+	_eputchar('\n');
+	_eputchar(BUF_FLUSH);
+}
+
+/**
  * _myexit - exits the shell
  * @info: Structure containing potential arguments this is Used to maintain
  *          constant function prototype.
@@ -95,4 +112,6 @@ int _myhelp(info_t *info)
 		_puts(*arg_array); /* temp att_unused workaround */
 	return (0);
 }
+
+
 

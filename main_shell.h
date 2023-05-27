@@ -173,7 +173,12 @@ int print_d(int, int);
 char *convert_number(long int, int, int);
 void remove_comments(char *);
 
+/* toem_helper.c */
+void process_input(info_t *info, char **av);
+void handle_exit_conditions(info_t *info, int builtin_ret);
+
 /* toem_builtin.c */
+void print_init_error(char **av);
 int _myexit(info_t *);
 int _mycd(info_t *);
 int _myhelp(info_t *);

@@ -7,7 +7,7 @@
  *
  * Return: 0 on success, 1 on error, or error code
  */
-int shloop(info_t *info, char **av)
+/*int shloop(info_t *info, char **av)
 {
 	ssize_t r = 0;
 	int builtin_ret = 0;
@@ -42,7 +42,18 @@ int shloop(info_t *info, char **av)
 	}
 	return (builtin_ret);
 }
+*/
 
+
+int shloop(info_t *info, char **av)
+{
+	int builtin_ret = 0;
+
+	process_input(info, av);
+	handle_exit_conditions(info, builtin_ret);
+	
+	return (builtin_ret);
+}
 /**
  * find_builtin_command - find builtin command
  * @info: the parameter & return info struct
@@ -130,7 +141,7 @@ void fork_cmd(info_t *info)
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		/* TODO: PUT ERROR FUNCTION */
+		print_error(info, "fork failed ");
 		perror("Error:");
 		return;
 	}
@@ -138,12 +149,12 @@ void fork_cmd(info_t *info)
 	{
 		if (execve(info->path, info->argv, get_environ(info)) == -1)
 		{
+			print_error(info, "Error executing command ");
 			free_info(info, 1);
 			if (errno == EACCES)
 				exit(126);
 			exit(1);
 		}
-		/* TODO: PUT ERROR FUNCTION */
 	}
 	else
 	{

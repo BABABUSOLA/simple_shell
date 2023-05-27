@@ -11,7 +11,7 @@ int main(int ac, char **av)
 {
 	info_t info[] = {INFO_INIT};
 	int fd = 2;
-
+	int ret_val = EXIT_SUCCESS;
 	asm("mov %1, %0\n\t"
 		"add $3, %0"
 		: "=r"(fd)
@@ -23,14 +23,13 @@ int main(int ac, char **av)
 		if (fd == -1)
 		{
 			if (errno == EACCES)
+			{
+				print_error(info, "Permission Denied ");
 				exit(126);
+			}
 			if (errno == ENOENT)
 			{
-				_eputs(av[0]);
-				_eputs(": 0: Can't open ");
-				_eputs(av[1]);
-				_eputchar('\n');
-				_eputchar(BUF_FLUSH);
+				print_init_error(av);
 				exit(127);
 			}
 			return (EXIT_FAILURE);
@@ -40,6 +39,6 @@ int main(int ac, char **av)
 	populate_env_list(info);
 	read_history(info);
 	shloop(info, av);
-	return (EXIT_SUCCESS);
+	return (ret_val);
 }
 
