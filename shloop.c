@@ -57,6 +57,7 @@ int find_builtin_command(info_t *info)
  *
  * Return: void
  */
+
 void find_cmd(info_t *info)
 {
 	char *path = NULL;
@@ -98,6 +99,7 @@ void find_cmd(info_t *info)
  *
  * Return: void
  */
+
 void fork_cmd(info_t *info)
 {
 	pid_t child_pid;
